@@ -24,7 +24,8 @@ public class ExporterModuleDetector extends BaseStartupProjectDetector {
     private boolean _validateExporters(Path file) {
         String content = ProjectDetectorUtil.readFile(file);
 
-        if (content.contains("META-INF/service.xml") || content.contains("Liferay-Service")) {
+        if (content.contains("META-INF/service.xml") || content.contains("Liferay-Service") ||
+                content.contains("Fragment-Host")) {
             return false;
         }
 
@@ -43,7 +44,8 @@ public class ExporterModuleDetector extends BaseStartupProjectDetector {
         return false;
     }
 
-    private static final Pattern _EXPORT_PACKAGE_PATTERN = Pattern.compile(
-        "Export-Package:\\\\(\\s*\\n(?:\\s+.+\\\\s*\\n)*\\s+.+\\n?)");
+    private static final Pattern _EXPORT_PACKAGE_PATTERN  = Pattern.compile(
+        "(?m)^Export-Package:\\s*(\\\\\\s*\\n(?:[ \\t]*.+,?\\s*\\n)*[ \\t]*.+|.+)",
+        Pattern.MULTILINE);
 
 }
