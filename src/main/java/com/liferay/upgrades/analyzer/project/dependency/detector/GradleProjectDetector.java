@@ -18,53 +18,62 @@ public class GradleProjectDetector implements ProjectDetector {
 
     @Override
     public boolean matches(String fileName, Path file) {
-
-        if (fileName.equals("build.gradle")
-                && Files.exists(Paths.get(file.getParent().toString(), "src"))
-                && !Files.exists(Paths.get(file.getParent().toString(), "liferay-theme.json"))) {
-            return true;
-        }
-
-        return false;
+        return fileName.equals("build.gradle")
+            && Files.exists(Paths.get(file.getParent().toString(), "src"))
+            && _checkIsTheme(file);
     }
 
     @Override
     public void process(Path file, ProjectsDependencyGraphBuilder projectsDependencyGraphBuilder) {
         projectsDependencyGraphBuilder.addProject(
-                getProjectKey(
-                        file.getParent().toUri().getPath(),
-                        file.getParent().getFileName().toString()),
-                collectProjectDependencies(file));
+            _getProjectKey(
+                file.getParent().toUri().getPath(),
+                file.getParent().getFileName().toString()),
+            _collectProjectDependencies(file));
     }
 
-    private Set<Project> collectProjectDependencies(Path gradleFile) {
+    private Set<Project> _collectProjectDependencies(Path gradleFile) {
         Set<Project> dependencies = new HashSet<>();
 
-        Matcher matcher = GRADLE_PROJECT_PATTERN.matcher(
+        Matcher matcher = _GRADLE_PROJECT_PATTERN.matcher(
             ProjectDetectorUtil.readFile(gradleFile));
 
         while (matcher.find()) {
-            dependencies.add(getProjectKey(matcher.group(1)));
+            dependencies.add(_getProjectKey(matcher.group(1)));
         }
 
         return dependencies;
     }
 
-    private Project getProjectKey(String path, String rawProjectName) {
-        Project project = getProjectKey(rawProjectName);
+    private boolean _checkIsTheme(Path path) {
+        if (!Files.exists(
+                Paths.get(path.getParent().toString(), "liferay-theme.json"))) {
+
+            Path lookAndFeelPath = Paths.get(
+                    path.getParent().toString(),
+                    "/src/main/webapp/WEB-INF/liferay-look-and-feel.xml");
+
+            return !lookAndFeelPath.toFile().exists();
+        }
+
+        return false;
+    }
+
+    private Project _getProjectKey(String path, String rawProjectName) {
+        Project project = _getProjectKey(rawProjectName);
 
         project.setPath(path);
 
         return project;
     }
-    
-    private Project getProjectKey(String rawProjectName) {
-       return ProjectDetectorUtil.getProjectKey(rawProjectName, projectInfos);
+
+    private Project _getProjectKey(String rawProjectName) {
+       return ProjectDetectorUtil.getProjectKey(rawProjectName, _projectInfos);
     }
 
-    private final Map<String, Project> projectInfos = new HashMap<>();
+    private final Map<String, Project> _projectInfos = new HashMap<>();
 
-    private static final Pattern GRADLE_PROJECT_PATTERN = Pattern.compile(
+    private static final Pattern _GRADLE_PROJECT_PATTERN = Pattern.compile(
         "project.*\\(*[\"'](.*)[\"']\\)");
 
 }
