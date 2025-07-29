@@ -7,6 +7,7 @@ import com.beust.jcommander.ParameterException;
 
 import com.liferay.upgrades.analyzer.project.dependency.analyzer.ProjectDependencyAnalyzer;
 import com.liferay.upgrades.analyzer.project.dependency.analyzer.factory.ProjectDependencyAnalyzerFactory;
+import com.liferay.upgrades.analyzer.project.dependency.constant.ExportOptionsConstant;
 import com.liferay.upgrades.analyzer.project.dependency.exporter.enums.ProjectExporter;
 import com.liferay.upgrades.analyzer.project.dependency.graph.builder.ProjectsDependencyGraph;
 
@@ -22,16 +23,17 @@ public class Main {
             for (Map.Entry<String, Boolean> entry : exportOptions.exporters().entrySet()) {
                 if (entry.getValue()) {
                     ProjectDependencyAnalyzer projectDependencyAnalyzer =
-                        ProjectDependencyAnalyzerFactory.getProjectDependencyAnalyzer(entry.getKey());
+                        ProjectDependencyAnalyzerFactory.getProjectDependencyAnalyzer(
+                            entry.getKey());
 
                     ProjectsDependencyGraph projectsDependencyGraph =
                         projectDependencyAnalyzer.analyze(exportOptions.directory);
 
-                    if (entry.getKey().equals("dot-graph"))
+                    if (entry.getKey().equals(ExportOptionsConstant.EXPORT_TYPE_DOT_GRAPH))
                         ProjectExporter.DOT_GRAPH.export(projectsDependencyGraph);
-                    if (entry.getKey().equals("game-plan"))
+                    if (entry.getKey().equals(ExportOptionsConstant.EXPORT_TYPE_GAME_PLAN))
                         ProjectExporter.GAME_PLAN.export(projectsDependencyGraph);
-                    if (entry.getKey().equals("startup-game-plan"))
+                    if (entry.getKey().equals(ExportOptionsConstant.EXPORT_TYPE_STARTUP_GAME_PLAN))
                         ProjectExporter.STARTUP_GAME_PLAN.export(projectsDependencyGraph);
                 }
             }
@@ -57,8 +59,8 @@ public class Main {
         ExportOptions exportOptions = new ExportOptions();
 
         JCommander jCommander = JCommander.newBuilder()
-                .addObject(exportOptions)
-                .build();
+            .addObject(exportOptions)
+            .build();
 
         jCommander.parse(args);
 
@@ -81,9 +83,9 @@ public class Main {
 
         public Map<String, Boolean> exporters() {
             return Map.of(
-                "dot-graph", dotGraph, "game-plan", gamePlan,
-                "startup-game-plan", startupGamePlan
-            );
+                ExportOptionsConstant.EXPORT_TYPE_DOT_GRAPH, dotGraph,
+                ExportOptionsConstant.EXPORT_TYPE_GAME_PLAN, gamePlan,
+                ExportOptionsConstant.EXPORT_TYPE_STARTUP_GAME_PLAN, startupGamePlan);
         }
 
         @Parameter(
