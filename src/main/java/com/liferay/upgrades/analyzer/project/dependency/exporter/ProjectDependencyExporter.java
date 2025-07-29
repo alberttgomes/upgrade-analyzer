@@ -4,6 +4,6 @@ import com.liferay.upgrades.analyzer.project.dependency.graph.builder.ProjectsDe
 
 public interface ProjectDependencyExporter<T> {
 
-    public T export(ProjectsDependencyGraph projectsDependencyGraph);
+    T export(ProjectsDependencyGraph projectsDependencyGraph);
 
 }
