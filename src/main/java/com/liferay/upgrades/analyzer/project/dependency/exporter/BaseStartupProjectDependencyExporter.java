@@ -33,6 +33,7 @@ public abstract class BaseStartupProjectDependencyExporter
         categoryMap.put("Services and APIs", new StringBuilder());
         categoryMap.put("Plugins", new StringBuilder());
         categoryMap.put("Fragment-Hosts", new StringBuilder());
+        categoryMap.put("JS Portlet Widgets", new StringBuilder());
         categoryMap.put("Others (including themes)", new StringBuilder());
 
         for (Project project : projectsDependencyGraph.getLeaves()) {
@@ -51,9 +52,14 @@ public abstract class BaseStartupProjectDependencyExporter
                 appendByCategory(categoryMap, "Plugins", projectName);
             }
             else if (projectCategory.equals(
-            FragmentHostModuleProjectDetector.class.getSimpleName())) {
+                FragmentHostModuleProjectDetector.class.getSimpleName())) {
 
                 appendByCategory(categoryMap, "Fragment-Hosts", projectName);
+            }
+            else if (projectCategory.equals(
+                JSPortletModuleProjectDetector.class.getSimpleName())) {
+
+                appendByCategory(categoryMap, "JS Portlet Widgets", projectName);
             }
             else {
                 appendByCategory(
