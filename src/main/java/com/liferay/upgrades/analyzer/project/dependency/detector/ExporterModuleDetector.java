@@ -24,8 +24,11 @@ public class ExporterModuleDetector extends BaseStartupProjectDetector {
     private boolean _validateExporters(Path file) {
         String content = ProjectDetectorUtil.readFile(file);
 
-        if (content.contains("META-INF/service.xml") || content.contains("Liferay-Service") ||
-                content.contains("Fragment-Host")) {
+        if (content.contains("Fragment-Host") ||
+                content.contains("Liferay-Service") ||
+                    content.contains("META-INF/service.xml") ||
+                        content.contains("Web-Context")) {
+
             return false;
         }
 
