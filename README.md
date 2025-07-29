@@ -51,7 +51,7 @@ curl -o- https://raw.githubusercontent.com/liferay-upgrades/upgrade-analyzer/mas
 to download and install the latest version. It will include a bash function named "analyze_upgrade_project" and an alias called "aup" to execute the tool. You might run the tool without parameters to get the available options.
 To test the installation, after reloading your `.bashrc`, run in your terminal: 
 ```
-aup /path/to/client/workspace
+aup -f /path/to/client/workspace
 ```
 **Requirements to build and run**
 
