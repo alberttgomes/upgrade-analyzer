@@ -48,7 +48,7 @@ public class GamePlanProjectDependencyExportersTest {
     }
 
     @Test
-    public void testExportCSVWithMoreThanOneDependecy() throws IOException {
+    public void testExportCSVWithMoreThanOneDependency() throws IOException {
         final var expectedMessage = "CSV file generated at ";
 
         ProjectsDependencyGraph projectsDependencyGraph = _createWithDependencies();
