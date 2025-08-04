@@ -23,4 +23,4 @@ jobs:
           gradle-version: 8.4
 
       - name: Execute Gradle build
-        run: ./gradlew clean build
+        run: ./gradlew test --info --stacktrace --console=plain
