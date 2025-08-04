@@ -44,10 +44,10 @@ public class GradleProjectDetector implements ProjectDetector {
         Matcher matcher = _GRADLE_PROJECT_PATTERN.matcher(
             ProjectDetectorUtil.readFile(gradleFile));
 
-        while (matcher.find() &&
-                !_validateProjectDependency(matcher.group())) {
+        while ((matcher.find()) &&
+                (!_validateProjectDependency(matcher.group()))) {
 
-            dependencies.add(_getProjectKey(matcher.group(1)));
+            dependencies.add(_getProjectKey(matcher.group(3)));
         }
 
         return dependencies;
@@ -86,7 +86,7 @@ public class GradleProjectDetector implements ProjectDetector {
     private final Map<String, Project> _projectInfos = new HashMap<>();
 
     private static final Pattern _GRADLE_PROJECT_PATTERN = Pattern.compile(
-        "//\\s+?compileOnly|compileInclude|implementation\\s+" +
+        "(//\\s*)?(compileOnly|compileInclude|implementation)\\s+" +
                 "project.*\\(*[\"'](.*)[\"']\\)");
 
 }
