@@ -1,0 +1,5 @@
+package com.liferay.upgrades.analyzer.gradle.detector.p2
+
+dependencies {
+    //  compileOnly project(":detector:p-3")
+}
