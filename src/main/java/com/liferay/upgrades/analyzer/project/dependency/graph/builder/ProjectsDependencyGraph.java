@@ -2,6 +2,7 @@ package com.liferay.upgrades.analyzer.project.dependency.graph.builder;
 
 import com.liferay.upgrades.analyzer.project.dependency.model.Project;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,6 +42,11 @@ public class ProjectsDependencyGraph {
         }
 
         return max;
+    }
+
+    @Override
+    public String toString() {
+        return "leaves: " + Arrays.deepToString(_leaves.toArray());
     }
 
     private int depth  = -1;
