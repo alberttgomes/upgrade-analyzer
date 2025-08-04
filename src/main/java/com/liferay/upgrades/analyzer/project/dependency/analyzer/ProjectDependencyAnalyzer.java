@@ -4,7 +4,6 @@ import com.liferay.upgrades.analyzer.project.dependency.detector.ProjectDetector
 import com.liferay.upgrades.analyzer.project.dependency.graph.builder.ProjectsDependencyGraph;
 import com.liferay.upgrades.analyzer.project.dependency.graph.builder.ProjectsDependencyGraphBuilder;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -25,10 +24,9 @@ public class ProjectDependencyAnalyzer {
         try {
             Files.walkFileTree(Paths.get(rootProjectPath), new SimpleFileVisitor<>() {
 
-                @Nonnull
                 @Override
                 public FileVisitResult preVisitDirectory(
-                    @Nonnull Path dir, @Nonnull BasicFileAttributes attrs) throws IOException {
+                    Path dir, BasicFileAttributes attrs) throws IOException {
 
                     String folderName = dir.getFileName().toString();
 
@@ -39,10 +37,9 @@ public class ProjectDependencyAnalyzer {
                     return FileVisitResult.CONTINUE;
                 }
 
-                @Nonnull
                 @Override
                 public FileVisitResult visitFile(
-                    @Nonnull Path file, @Nonnull BasicFileAttributes attrs) throws IOException {
+                    Path file, BasicFileAttributes attrs) throws IOException {
 
                     String fileName = file.getFileName().toString();
 
@@ -71,6 +68,10 @@ public class ProjectDependencyAnalyzer {
 
         return _projectsDependencyGraphBuilder.build();
 
+    }
+
+    public ProjectsDependencyGraphBuilder getProjectsDependencyGraphBuilder() {
+        return _projectsDependencyGraphBuilder;
     }
 
     private final ProjectsDependencyGraphBuilder _projectsDependencyGraphBuilder;
