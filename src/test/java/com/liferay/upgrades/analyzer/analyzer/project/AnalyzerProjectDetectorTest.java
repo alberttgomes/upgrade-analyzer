@@ -4,7 +4,6 @@ import com.liferay.upgrades.analyzer.project.dependency.detector.GradleProjectDe
 import com.liferay.upgrades.analyzer.project.dependency.detector.ProjectDetector;
 import com.liferay.upgrades.analyzer.project.dependency.graph.builder.ProjectsDependencyGraphBuilder;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -18,23 +17,21 @@ import org.junit.jupiter.api.Test;
 public class AnalyzerProjectDetectorTest {
 
     @Test
-    public void testProjectDependencyGraphNonExistentProject() throws IOException {
+    public void testProjectDependencyGraphNonExistentProject() throws Exception {
         ProjectsDependencyGraphBuilder projectsDependencyGraphBuilder =
             new ProjectsDependencyGraphBuilder();
 
         ClassLoader classLoader = getClass().getClassLoader();
 
-        String rootProjectPathP1 = Objects.requireNonNull(
-            classLoader.getResource(
-                "com/liferay/upgrades/analyzer/gradle/detector/p1/build.gradle")).getPath();
+        Path fileP1 = Paths.get(
+            Objects.requireNonNull(classLoader.getResource(
+                "com/liferay/upgrades/analyzer/gradle/detector/p1/build.gradle")
+            ).toURI());
 
-        Path fileP1 = Paths.get(rootProjectPathP1);
-
-        String rootProjectPathP2 = Objects.requireNonNull(
-            classLoader.getResource(
-                "com/liferay/upgrades/analyzer/gradle/detector/p2/build.gradle")).getPath();
-
-        Path fileP2 = Paths.get(rootProjectPathP2);
+        Path fileP2 = Paths.get(
+            Objects.requireNonNull(classLoader.getResource(
+                "com/liferay/upgrades/analyzer/gradle/detector/p2/build.gradle")
+            ).toURI());
 
         ProjectDetector projectDetector = new GradleProjectDetector();
 
@@ -46,7 +43,9 @@ public class AnalyzerProjectDetectorTest {
 
         String result = projectsDependencyGraphBuilder.build().toString();
 
-        Assertions.assertEquals(_EXPECTED_DEPENDENCIES_OUT_PUT, result);
+        Assertions.fail("resul:" + result);
+
+//        Assertions.assertEquals(_EXPECTED_DEPENDENCIES_OUT_PUT, result);
     }
 
     private void _analyzer(
