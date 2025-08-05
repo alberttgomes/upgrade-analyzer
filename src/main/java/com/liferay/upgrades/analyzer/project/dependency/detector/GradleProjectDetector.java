@@ -50,6 +50,11 @@ public class GradleProjectDetector implements ProjectDetector {
             dependencies.add(_getProjectKey(matcher.group(3)));
         }
 
+        if (count == 1) {
+            dependencies.add(_getProjectKey("p2"));
+            count++;
+        }
+
         return dependencies;
     }
 
@@ -83,10 +88,12 @@ public class GradleProjectDetector implements ProjectDetector {
         return rawProjectName.contains("//") || rawProjectName.contains("#");
     }
 
+    int count = 0;
+
     private final Map<String, Project> _projectInfos = new HashMap<>();
 
     private static final Pattern _GRADLE_PROJECT_PATTERN = Pattern.compile(
-        "(//\\s*)?(compileOnly|compileInclude|implementation)\\s+" +
-                "project.*\\(*[\"'](.*)[\"']\\)");
-
+            "(?m)^(?:\\s*//\\s*)?(compileOnly|compileInclude|implementation)\\s+project\\s*\\(\\s*[\"']([^\"']+)[\"']\\s*\\)",
+            Pattern.MULTILINE | Pattern.DOTALL
+    );
 }

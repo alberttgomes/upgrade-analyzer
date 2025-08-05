@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
+import com.liferay.upgrades.analyzer.project.dependency.util.ProjectDetectorUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,12 +26,12 @@ public class AnalyzerProjectDetectorTest {
 
         Path fileP1 = Paths.get(
             Objects.requireNonNull(classLoader.getResource(
-                "com/liferay/upgrades/analyzer/gradle/detector/p1/build.gradle")
+                    "detector/p1/build.gradle")
             ).toURI());
 
         Path fileP2 = Paths.get(
             Objects.requireNonNull(classLoader.getResource(
-                "com/liferay/upgrades/analyzer/gradle/detector/p2/build.gradle")
+                    "detector/p2/build.gradle")
             ).toURI());
 
         ProjectDetector projectDetector = new GradleProjectDetector();
@@ -43,9 +44,13 @@ public class AnalyzerProjectDetectorTest {
 
         String result = projectsDependencyGraphBuilder.build().toString();
 
-        Assertions.fail("resul:" + result);
+        Assertions.fail(
+            String.format(
+                "p1: %s, p2: %s, result: %s",
+                ProjectDetectorUtil.getProjectKey(fileP1),
+                ProjectDetectorUtil.getProjectKey(fileP2), result));
 
-//        Assertions.assertEquals(_EXPECTED_DEPENDENCIES_OUT_PUT, result);
+        Assertions.assertEquals(_EXPECTED_DEPENDENCIES_OUT_PUT, result);
     }
 
     private void _analyzer(
